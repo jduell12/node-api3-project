@@ -54,12 +54,24 @@ router.get("/:id/posts", validateUserId, (req, res) => {
   }
 });
 
-router.delete("/:id", (req, res) => {
-  // do your magic!
+router.delete("/:id", validateUserId, (req, res) => {
+  try {
+    UserData.remove(req.params.id).then((deleted) => {
+      res.status(200).json({ message: "user deleted" });
+    });
+  } catch {
+    res.status(500).json({ errorMessage: "Could not delete user" });
+  }
 });
 
-router.put("/:id", (req, res) => {
-  // do your magic!
+router.put("/:id", validateUserId, validateUser, (req, res) => {
+  try {
+    UserData.update(req.user.id, req.body).then((user) => {
+      res.status(200).json({ updated: user });
+    });
+  } catch {
+    res.status(500).json({ errorMessage: "Could not edit user" });
+  }
 });
 
 //custom middleware
