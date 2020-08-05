@@ -67,7 +67,7 @@ router.delete("/:id", validateUserId, (req, res) => {
 router.put("/:id", validateUserId, validateUser, (req, res) => {
   try {
     UserData.update(req.user.id, req.body).then((user) => {
-      res.status(200).json({ updated: user });
+      res.status(200).json({ message: "user updated" });
     });
   } catch {
     res.status(500).json({ errorMessage: "Could not edit user" });
