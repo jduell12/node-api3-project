@@ -3,8 +3,14 @@ const UserData = require("./userDb");
 
 const router = express.Router();
 
-router.post("/", (req, res) => {
-  // do your magic!
+router.post("/", validateUser, (req, res) => {
+  UserData.insert(req.body)
+    .then((user) => {
+      res.status(201).json({ message: `created ${user}` });
+    })
+    .catch((err) => {
+      res.status(500).json({ errorMessage: "Unable to create user" });
+    });
 });
 
 router.post("/:id/posts", (req, res) => {
@@ -54,7 +60,18 @@ function validateUserId(req, res, next) {
 }
 
 function validateUser(req, res, next) {
-  // do your magic!
+  const userInfo = req.body;
+  console.log(req.body);
+
+  if (!userInfo) {
+    res.status(400).json({ message: "missing user data" });
+  } else {
+    if (!userInfo.name) {
+      res.status(400).json({ message: "missing required name field" });
+    } else {
+      next();
+    }
+  }
 }
 
 function validatePost(req, res, next) {

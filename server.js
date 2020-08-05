@@ -7,6 +7,7 @@ const postRouter = require("./posts/postRouter");
 
 server.use(time.init);
 server.use(logger);
+server.use(express.json());
 
 server.use("/users", userRouter);
 server.use("/posts", postRouter);
